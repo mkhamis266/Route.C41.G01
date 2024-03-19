@@ -7,7 +7,7 @@ using Route.C41.G01.DAL.Models;
 
 namespace Route.C41.G01.BLL.Interfaces
 {
-    internal interface IDepartmentRepository
+    public interface IDepartmentRepository
     {
         IEnumerable<Department> GetAll();
 
