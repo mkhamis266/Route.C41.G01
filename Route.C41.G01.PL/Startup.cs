@@ -30,8 +30,8 @@ namespace Route.C41.G01.PL
             //services.AddScoped<ApplicationDbContext>();
             //services.AddScoped<DbContextOptions<ApplicationDbContext>>();
 
-            services.AddDbContext<ApplicationDbContext>(options=>
-            options.UseSqlServer("Server = .; Database = MVCApplicationG01; Trusted_Connection = True;"));
+            services.AddDbContext<ApplicationDbContext>(options=>   
+            options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
