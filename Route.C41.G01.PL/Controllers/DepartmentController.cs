@@ -30,8 +30,8 @@ namespace Route.C41.G01.PL.Controllers
 
         [HttpPost]
         public IActionResult Create(Department department)
-        { 
-            if(ModelState.IsValid)
+        {
+            if (ModelState.IsValid)
             {
                 var Count = _departmentRepository.Add(department);
                 if (Count > 0)
@@ -39,5 +39,24 @@ namespace Route.C41.G01.PL.Controllers
             }
             return View(department);
         }
+
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                var Department = _departmentRepository.Get(id.Value);
+                if (Department is null)
+                    return NotFound();
+
+                return View(Department);
+
+            }
+        }
+
     }
 }
