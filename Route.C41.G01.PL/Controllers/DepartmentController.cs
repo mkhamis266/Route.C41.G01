@@ -89,6 +89,9 @@ namespace Route.C41.G01.PL.Controllers
                 }
                 catch (Exception ex)
                 {
+                    // 1. Log Exeption
+                    // 2. Friendly Message
+
                     if (_env.IsDevelopment())
                         ModelState.AddModelError(String.Empty, ex.Message);
                     else
@@ -96,6 +99,32 @@ namespace Route.C41.G01.PL.Controllers
 
                     return View(department);
                 }
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            Department department = _departmentRepository.Get(id);
+            
+            if (department is null) return NotFound();
+
+            try
+            {
+                _departmentRepository.Delete(department);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // 1. Log Exeption
+                // 2. Friendly Message
+
+                if (_env.IsDevelopment())
+                    ModelState.AddModelError(String.Empty, ex.Message);
+                else
+                    ModelState.AddModelError(String.Empty, "An Error Has Occured During Deleting the department");
+
+                return View(department);
             }
         }
     }
