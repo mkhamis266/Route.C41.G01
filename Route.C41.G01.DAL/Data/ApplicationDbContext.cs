@@ -24,11 +24,13 @@ namespace Route.C41.G01.DAL.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           // modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations());
+			// modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations());
+			// modelBuilder.ApplyConfiguration<Employee>(new EmployeeConfigurations());
 
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
