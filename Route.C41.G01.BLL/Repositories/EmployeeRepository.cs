@@ -9,7 +9,7 @@ using Route.C41.G01.DAL.Models;
 
 namespace Route.C41.G01.BLL.Repositories
 {
-	internal class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
+	public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
 	{
 		public EmployeeRepository(ApplicationDbContext dbContext):base(dbContext)
 		{

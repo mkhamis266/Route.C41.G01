@@ -37,7 +37,8 @@ namespace Route.C41.G01.PL.Controllers
 			}
 		}
 
-		public IActionResult Creat()
+		[HttpGet]
+		public IActionResult Create()
 		{
 			return View();
 		}
@@ -49,7 +50,7 @@ namespace Route.C41.G01.PL.Controllers
             {
                 var count = _employeeRepository.Add(employee);
 				if (count > 0) 
-					RedirectToAction("Index");
+					return RedirectToAction("Index");
             }
 			return View(employee);
         }
