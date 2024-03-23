@@ -18,10 +18,8 @@ namespace Route.C41.G01.DAL.Models
 		FullTime = 1,
 		PartTime = 2,
 	}
-	public class Employee
+	public class Employee: ModelBase
 	{
-        public int Id { get; set; }
-
 		[Required]
 		[MaxLength(50, ErrorMessage = "Max Length of Name is 50 characters")]
 		[MinLength(5, ErrorMessage = "Min Length of Name is 5 characters")]
