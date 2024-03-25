@@ -19,6 +19,15 @@ namespace Route.C41.G01.PL.Controllers
 
 		public IActionResult Index()
 		{
+			// Bind Through View's Dictionary : Transfer Data from Action to View [one way]
+			// 1. viewData: is a Dictionary Type Property (introduced in ASP.Net Framwork 3.5)
+			//   => it help us to transfer data from Controller[Action] to view
+			ViewData["Message"] = "Hello From View Data";
+
+            // 2. viewBag: Dynamic type property (introduced in ASP.Net Framwork 4.0 based on dynamic type)
+            //   => it help us to transfer data from Controller[Action] to view
+
+            ViewBag.Message = "Hello From View Bag";
 			var employees = _employeeRepository.GetAll();
 			return View(employees);
 		}

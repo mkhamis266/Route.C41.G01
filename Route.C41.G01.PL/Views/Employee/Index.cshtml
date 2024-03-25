@@ -1,6 +1,9 @@
 ﻿@model IEnumerable<Employee>
 @{
     ViewData["Title"] = "Index";
+
+    string viewDataMessage = ViewData["Message"] as string; // Enforce Type Safety -> Requris type conversion
+    string viewBagMessage = ViewBag.Message; // Can't Enforce Type safty -> not Requir type conversion
 }
 
 <h1>All Employees</h1>
@@ -10,6 +13,8 @@
 
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary mb-2">Create New Employee</a>
 <br />
+@* <div class="alert alert-warning">@ViewData["Message"]</div> *@
+<div class="alert alert-success">@ViewBag.Message</div>
 
 @if(Model.Count() > 0)
 {
