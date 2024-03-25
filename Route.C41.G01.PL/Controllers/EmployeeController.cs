@@ -19,6 +19,8 @@ namespace Route.C41.G01.PL.Controllers
 
 		public IActionResult Index()
 		{
+			// if you want to keep the temp data in another redirection 
+			TempData.Keep(); 
 			// Bind Through View's Dictionary : Transfer Data from Action to View [one way]
 			// 1. viewData: is a Dictionary Type Property (introduced in ASP.Net Framwork 3.5)
 			//   => it help us to transfer data from Controller[Action] to view
@@ -57,8 +59,15 @@ namespace Route.C41.G01.PL.Controllers
 		{
             if (ModelState.IsValid)
             {
+				// TempData: is Dictionary Type Property (introduced in ASP.net Framwork 3.5)
+				//         => used  to pass data between two consecutive requests.
                 var count = _employeeRepository.Add(employee);
-				if (count > 0) 
+				if (count > 0)
+					TempData["Message"] = "Department Created Succeefuly";
+				
+				else
+                    TempData["Message"] = "An Error Occured";
+                
 					return RedirectToAction("Index");
             }
 			return View(employee);
