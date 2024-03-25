@@ -7,8 +7,8 @@ using Route.C41.G01.DAL.Models;
 
 namespace Route.C41.G01.BLL.Interfaces
 {
-    public interface IDepartmentRepository : IGenericRepository<Department>
-    {
-
-    }
+	public interface IEmployeeRepository : IGenericRepository<Employee>
+	{
+		IQueryable<Employee> GetEmployeesByAddress(string address);
+	}
 }
