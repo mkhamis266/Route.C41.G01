@@ -16,6 +16,17 @@
 @* <div class="alert alert-warning">@ViewData["Message"]</div> *@
 @* <div class="alert alert-success">@ViewBag.Message</div> *@
 
+<div class="row justify-content-center align-content-center mt-5">
+    <form asp-action="Index" class="col-8 row offset-2">
+        <div class="col-8">
+            <input type="text" class="form-control" name="searchInp" id="searchInp" placeholder="SearchByName" />
+        </div>
+        <div class="col-4">
+            <input type="submit" value="Search" class="btn btn-success"/>
+        </div>
+    </form>
+</div>
+
 @if (!string.IsNullOrEmpty(TempData["Message"] as string))
 {
   <div class="alert alert-success">@TempData["Message"]</div>
