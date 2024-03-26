@@ -13,6 +13,7 @@ using Route.C41.G01.BLL.Interfaces;
 using Route.C41.G01.BLL.Repositories;
 using Route.C41.G01.DAL.Data;
 using Route.C41.G01.PL.Extensions;
+using Route.C41.G01.PL.Helpers;
 
 namespace Route.C41.G01.PL
 {
@@ -29,18 +30,20 @@ namespace Route.C41.G01.PL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-        
+
             //services.AddScoped<ApplicationDbContext>();
             //services.AddScoped<DbContextOptions<ApplicationDbContext>>();
 
             services.AddDbContext<ApplicationDbContext>(
-                options=> {
+                options => {
                     options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
                 }/*,ServiceLifetime.Singleton*/);
             //ApplicationServicesExtensions.AddApplicationServices(services); Static Method
 
             //Extention Method
             services.AddApplicationServices();
+
+            services.AddAutoMapper(M => M.AddProfile( new MappingProfiles() ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
