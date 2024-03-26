@@ -2,17 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G01.BLL.Interfaces;
+using Route.C41.G01.BLL.Repositories;
 using Route.C41.G01.DAL.Models;
 
 namespace Route.C41.G01.PL.Controllers
 {
 	public class EmployeeController : Controller
 	{
+		//private readonly IDepartmentRepository _departmentRepository;
 		private readonly IEmployeeRepository _employeeRepository;
+
 		private readonly IHostEnvironment _env;
 
-		public EmployeeController(IEmployeeRepository employeeRepository, IHostEnvironment env) 
+		public EmployeeController(IEmployeeRepository employeeRepository, /*IDepartmentRepository departmentRepository*/IHostEnvironment env) 
 		{
+			//_departmentRepository = departmentRepository;
 			_employeeRepository = employeeRepository;
 			_env = env;
 		}
@@ -51,6 +55,8 @@ namespace Route.C41.G01.PL.Controllers
 		[HttpGet]
 		public IActionResult Create()
 		{
+			//ViewData["Departments"] = _departmentRepository.GetAll();
+			//ViewBag.Departments = _departmentRepository.GetAll();
 			return View();
 		}
 
@@ -75,6 +81,7 @@ namespace Route.C41.G01.PL.Controllers
 
 		public IActionResult Edit(int? id) 
 		{
+			//ViewBag.Departments = _departmentRepository.GetAll();
 			return Details(id, "Edit");
 		}
 
