@@ -16,12 +16,19 @@ namespace Route.C41.G01.BLL.Repositories
 			
 		}
 
+        public IQueryable<Employee> GetEmployeesByName(string name)
+        {
+            return _dbContext.Employees.Where(E => E.Name.ToLower().Contains(name.ToLower()));
+        }
+
 		public IQueryable<Employee> GetEmployeesByAddress(string address)
 		{
 			//return _dbContext.Employees.Where(E=> E.Address.ToLower() == address.ToLower());\
 
 			// for better performance
-			return _dbContext.Employees.Where(E=> string.Equals(E.Address, address, StringComparison.OrdinalIgnoreCase));
+			return _dbContext.Employees.Where(E => string.Equals(E.Address, address, StringComparison.OrdinalIgnoreCase));
 		}
+
+
 	}
 }

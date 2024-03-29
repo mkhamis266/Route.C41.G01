@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G01.BLL.Interfaces;
 using Route.C41.G01.BLL.Repositories;
 using Route.C41.G01.DAL.Models;
+using Route.C41.G01.PL.ViewModels;
 
 namespace Route.C41.G01.PL.Controllers
 {
@@ -12,18 +15,21 @@ namespace Route.C41.G01.PL.Controllers
     // Association: has DepartmentRepository
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+		private readonly IMapper _mapper;
+		private readonly IDepartmentRepository _departmentRepository;
         private readonly IWebHostEnvironment _env;
-        public DepartmentController(IDepartmentRepository departmentRepository, IWebHostEnvironment env)
+        public DepartmentController(IMapper mapper, IDepartmentRepository departmentRepository, IWebHostEnvironment env)
         {
-            _departmentRepository = departmentRepository;
+			_mapper = mapper;
+			_departmentRepository = departmentRepository;
             _env = env;
         }
 
         public IActionResult Index()
         {
             var departments = _departmentRepository.GetAll();
-            return View(departments);
+            var MappedDepartments = _mapper.Map<IEnumerable<Department>,IEnumerable<DepartmentViewModel>>(departments);
+            return View(MappedDepartments);
         }
 
         [HttpGet]
@@ -33,15 +39,16 @@ namespace Route.C41.G01.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Department department)
+        public IActionResult Create(DepartmentViewModel departmentVm)
         {
             if (ModelState.IsValid)
             {
-                var Count = _departmentRepository.Add(department);
+                var MappedDepartment = _mapper.Map<DepartmentViewModel, Department>(departmentVm);
+                var Count = _departmentRepository.Add(MappedDepartment);
                 if (Count > 0)
                     return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(departmentVm);
         }
 
         [HttpGet]
@@ -57,7 +64,8 @@ namespace Route.C41.G01.PL.Controllers
                 if (Department is null)
                     return NotFound();
 
-                return View(ViewName, Department);
+				var MappedDepartment = _mapper.Map<Department, DepartmentViewModel>(Department);
+				return View(ViewName, MappedDepartment);
 
             }
         }
@@ -70,21 +78,22 @@ namespace Route.C41.G01.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute]int id, Department department)
+        public IActionResult Edit([FromRoute]int id, DepartmentViewModel departmentVm)
         {
-            if (id != department.Id)
+            if (id != departmentVm.Id)
                 return BadRequest();
             
 
             if (!ModelState.IsValid)
             {
-                return View(department);
+                return View(departmentVm);
             }
             else
             {
                 try
                 {
-                    _departmentRepository.Update(department);
+					var MappedDepartment = _mapper.Map<DepartmentViewModel, Department>(departmentVm);
+					_departmentRepository.Update(MappedDepartment);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -97,7 +106,7 @@ namespace Route.C41.G01.PL.Controllers
                     else
                         ModelState.AddModelError(String.Empty, "An Error Has Occured During updating the department");
 
-                    return View(department);
+                    return View(departmentVm);
                 }
             }
         }
@@ -124,7 +133,8 @@ namespace Route.C41.G01.PL.Controllers
                 else
                     ModelState.AddModelError(String.Empty, "An Error Has Occured During Deleting the department");
 
-                return View(department);
+                var departmentVm = _mapper.Map<Department,DepartmentViewModel>(department);
+                return View(departmentVm);
             }
         }
     }
