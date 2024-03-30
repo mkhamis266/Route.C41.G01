@@ -20,19 +20,13 @@ namespace Route.C41.G01.BLL.Repositories
 		}
 
 
-        public int Add(T entity)
-		{
-			_dbContext.Set<T>().Add(entity);
-			return _dbContext.SaveChanges();
-		}
+		public void Add(T entity)
+			=> _dbContext.Set<T>().Add(entity);
 
-		public int Delete(T entity)
-		{
-			_dbContext.Set<T>().Remove(entity);
-			return _dbContext.SaveChanges();
-		}
+		public void Delete(T entity)
+			=> _dbContext.Set<T>().Remove(entity);
 
-		
+
 
 		public T Get(int id)
 		{
@@ -41,17 +35,15 @@ namespace Route.C41.G01.BLL.Repositories
 
 		public IEnumerable<T> GetAll()
 		{
-			if(typeof(T) == typeof(Employee))
-				return (IEnumerable<T>) _dbContext.Set<Employee>().Include(E => E.Department).AsNoTracking().ToList();
+			if (typeof(T) == typeof(Employee))
+				return (IEnumerable<T>)_dbContext.Set<Employee>().Include(E => E.Department).AsNoTracking().ToList();
 			else
-			 return _dbContext.Set<T>().AsNoTracking().ToList();
+				return _dbContext.Set<T>().AsNoTracking().ToList();
 		}
 
 
-		public int Update(T entity)
-		{
-			_dbContext.Set<T>().Update(entity);
-			return _dbContext.SaveChanges();
-		}
+		public void Update(T entity)
+			=> _dbContext.Set<T>().Update(entity);
+
 	}
 }
