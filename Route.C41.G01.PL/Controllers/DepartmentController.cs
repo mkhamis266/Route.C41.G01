@@ -35,7 +35,7 @@ namespace Route.C41.G01.PL.Controllers
 
         public IActionResult Index()
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            var departments = _unitOfWork.Repository<Department>().GetAll();
             var MappedDepartments = _mapper.Map<IEnumerable<Department>,IEnumerable<DepartmentViewModel>>(departments);
             return View(MappedDepartments);
         }
@@ -52,7 +52,7 @@ namespace Route.C41.G01.PL.Controllers
             if (ModelState.IsValid)
             {
                 var MappedDepartment = _mapper.Map<DepartmentViewModel, Department>(departmentVm);
-                 _unitOfWork.DepartmentRepository.Add(MappedDepartment);
+                 _unitOfWork.Repository<Department>().Add(MappedDepartment);
                 var Count = _unitOfWork.Complete();
 
 				if (Count > 0)
@@ -70,7 +70,7 @@ namespace Route.C41.G01.PL.Controllers
             }
             else
             {
-                var Department = _unitOfWork.DepartmentRepository.Get(id.Value);
+                var Department = _unitOfWork.Repository<Department>().Get(id.Value);
                 if (Department is null)
                     return NotFound();
 
@@ -103,7 +103,7 @@ namespace Route.C41.G01.PL.Controllers
                 try
                 {
 					var MappedDepartment = _mapper.Map<DepartmentViewModel, Department>(departmentVm);
-					_unitOfWork.DepartmentRepository.Update(MappedDepartment);
+					_unitOfWork.Repository<Department>().Update(MappedDepartment);
                     _unitOfWork.Complete();
                     return RedirectToAction(nameof(Index));
                 }
@@ -125,13 +125,13 @@ namespace Route.C41.G01.PL.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            Department department = _unitOfWork.DepartmentRepository.Get(id);
+            Department department = _unitOfWork.Repository<Department>().Get(id);
             
             if (department is null) return NotFound();
 
             try
             {
-                _unitOfWork.DepartmentRepository.Delete(department);
+                _unitOfWork.Repository<Department>().Delete(department);
                 _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }

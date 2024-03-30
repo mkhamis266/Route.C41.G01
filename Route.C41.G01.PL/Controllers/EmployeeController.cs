@@ -51,14 +51,15 @@ namespace Route.C41.G01.PL.Controllers
 
             ViewBag.Message = "Hello From View Bag";
             var employees = Enumerable.Empty<Employee>();
+            var EmployeeRepository = _unitOfWork.Repository<Employee>() as EmployeeRepository;
 
-            if (String.IsNullOrEmpty(searchInp))
+			if (String.IsNullOrEmpty(searchInp))
             {
-                employees = _unitOfWork.EmployeeRepository.GetAll();
+                employees = EmployeeRepository.GetAll();
             }
             else
             {
-                employees = _unitOfWork.EmployeeRepository.GetEmployeesByName(searchInp);
+                employees = EmployeeRepository.GetEmployeesByName(searchInp);
             }
 
             var MappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
@@ -71,7 +72,7 @@ namespace Route.C41.G01.PL.Controllers
                 return BadRequest();
             else
             {
-                var employee = _unitOfWork.EmployeeRepository.Get(id.Value);
+                var employee = _unitOfWork.Repository<Employee>().Get(id.Value);
                 if (employee is null)
                     return NotFound();
 
@@ -116,7 +117,7 @@ namespace Route.C41.G01.PL.Controllers
 
 
                 var MappedEmp = _mapper.Map<EmployeeViewModel,Employee>(employeeVM);
-				 _unitOfWork.EmployeeRepository.Add(MappedEmp);
+				 _unitOfWork.Repository<Employee>().Add(MappedEmp);
                 var count = _unitOfWork.Complete();
 
                 if (count > 0)
@@ -150,7 +151,7 @@ namespace Route.C41.G01.PL.Controllers
                 try
                 {
                     var MappedEmp = _mapper.Map<EmployeeViewModel,Employee>(employeeVm);
-                    _unitOfWork.EmployeeRepository.Update(MappedEmp);
+                    _unitOfWork.Repository<Employee>().Update(MappedEmp);
                     _unitOfWork.Complete();
                     return RedirectToAction("Index");
                 }
@@ -182,7 +183,7 @@ namespace Route.C41.G01.PL.Controllers
             try
             {
 				var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVm);
-				_unitOfWork.EmployeeRepository.Delete(MappedEmp);
+				_unitOfWork.Repository<Employee>().Delete(MappedEmp);
                 _unitOfWork.Complete();
                 return RedirectToAction("index");
             }
