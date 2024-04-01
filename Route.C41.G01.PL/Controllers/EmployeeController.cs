@@ -77,6 +77,9 @@ namespace Route.C41.G01.PL.Controllers
                 if (employee is null)
                     return NotFound();
 
+                if (ViewName.Equals("Delete",StringComparison.OrdinalIgnoreCase))
+                    TempData["ImageName"] = employee.ImageName;
+
                 var MappedEmp = _mapper.Map<Employee,EmployeeViewModel>(employee);
                 return View(ViewName, MappedEmp);
             }
@@ -185,10 +188,16 @@ namespace Route.C41.G01.PL.Controllers
 
             try
             {
+                employeeVm.ImageName = TempData["ImageName"] as String;
 				var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVm);
 				_unitOfWork.Repository<Employee>().Delete(MappedEmp);
-                _unitOfWork.Complete();
-                return RedirectToAction("index");
+                var count = _unitOfWork.Complete();
+                if(count > 0)
+                {
+                    DocumentSettings.DeleteFile(employeeVm.ImageName, "images");
+                    return RedirectToAction("index");
+                }
+                return View(employeeVm);
             }
             catch (Exception ex)
             {
