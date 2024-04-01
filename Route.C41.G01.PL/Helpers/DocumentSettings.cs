@@ -10,7 +10,7 @@ namespace Route.C41.G01.PL.Helpers
 		{
 			//1. Get Located Folder Path
 			//string FolderPath = $"{Directory.GetCurrentDirectory()}\\wwwroot\\files\\{folderName}"; 
-			string FolderPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroor\\files",folderName);
+			string FolderPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\files",folderName);
 
 			if (!Directory.Exists(FolderPath))
 				Directory.CreateDirectory(FolderPath);

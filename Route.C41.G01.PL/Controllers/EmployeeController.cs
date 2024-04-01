@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Route.C41.G01.BLL.Interfaces;
 using Route.C41.G01.BLL.Repositories;
 using Route.C41.G01.DAL.Models;
+using Route.C41.G01.PL.Helpers;
 using Route.C41.G01.PL.ViewModels;
 
 namespace Route.C41.G01.PL.Controllers
@@ -116,7 +117,9 @@ namespace Route.C41.G01.PL.Controllers
                 ///var mappedEmployee = (Employee)employeeVM;
 
 
+                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image,"images");
                 var MappedEmp = _mapper.Map<EmployeeViewModel,Employee>(employeeVM);
+                
 				 _unitOfWork.Repository<Employee>().Add(MappedEmp);
                 var count = _unitOfWork.Complete();
 
