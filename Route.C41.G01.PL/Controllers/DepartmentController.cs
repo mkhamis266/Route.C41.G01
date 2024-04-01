@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +34,9 @@ namespace Route.C41.G01.PL.Controllers
             _env = env;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var departments = _unitOfWork.Repository<Department>().GetAll();
+            var departments = await _unitOfWork.Repository<Department>().GetAllAsync();
             var MappedDepartments = _mapper.Map<IEnumerable<Department>,IEnumerable<DepartmentViewModel>>(departments);
             return View(MappedDepartments);
         }
@@ -47,13 +48,13 @@ namespace Route.C41.G01.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(DepartmentViewModel departmentVm)
+        public async Task<IActionResult> Create(DepartmentViewModel departmentVm)
         {
             if (ModelState.IsValid)
             {
                 var MappedDepartment = _mapper.Map<DepartmentViewModel, Department>(departmentVm);
                  _unitOfWork.Repository<Department>().Add(MappedDepartment);
-                var Count = _unitOfWork.Complete();
+                var Count = await _unitOfWork.Complete();
 
 				if (Count > 0)
                     return RedirectToAction(nameof(Index));
@@ -62,7 +63,7 @@ namespace Route.C41.G01.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id, string ViewName = "Details")
+        public async Task<IActionResult> Details(int? id, string ViewName = "Details")
         {
             if (!id.HasValue)
             {
@@ -70,7 +71,7 @@ namespace Route.C41.G01.PL.Controllers
             }
             else
             {
-                var Department = _unitOfWork.Repository<Department>().Get(id.Value);
+                var Department = await _unitOfWork.Repository<Department>().GetAsync(id.Value);
                 if (Department is null)
                     return NotFound();
 
@@ -81,14 +82,14 @@ namespace Route.C41.G01.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute]int id, DepartmentViewModel departmentVm)
+        public async Task<IActionResult> Edit([FromRoute]int id, DepartmentViewModel departmentVm)
         {
             if (id != departmentVm.Id)
                 return BadRequest();
@@ -104,7 +105,7 @@ namespace Route.C41.G01.PL.Controllers
                 {
 					var MappedDepartment = _mapper.Map<DepartmentViewModel, Department>(departmentVm);
 					_unitOfWork.Repository<Department>().Update(MappedDepartment);
-                    _unitOfWork.Complete();
+                    await _unitOfWork.Complete();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -123,16 +124,16 @@ namespace Route.C41.G01.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            Department department = _unitOfWork.Repository<Department>().Get(id);
+            Department department = await _unitOfWork.Repository<Department>().GetAsync(id);
             
             if (department is null) return NotFound();
 
             try
             {
                 _unitOfWork.Repository<Department>().Delete(department);
-                _unitOfWork.Complete();
+                await _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

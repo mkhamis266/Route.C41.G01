@@ -7,13 +7,13 @@ using Route.C41.G01.DAL.Models;
 
 namespace Route.C41.G01.BLL.Interfaces
 {
-	public interface IUnitOfWork : IDisposable
+	public interface IUnitOfWork : IAsyncDisposable
 	{
 		//IEmployeeRepository EmployeeRepository { get; set; }
 		//IDepartmentRepository DepartmentRepository { get; set; }
 
 		IGenericRepository<T> Repository<T>() where T : ModelBase;
 
-		int Complete();
+		Task<int> Complete();
 	}
 }

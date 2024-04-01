@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -38,7 +39,7 @@ namespace Route.C41.G01.PL.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
-		public IActionResult Index(string searchInp)
+		public async Task<IActionResult> Index(string searchInp)
 		{
 			// if you want to keep the temp data in another redirection 
 			TempData.Keep();
@@ -56,7 +57,7 @@ namespace Route.C41.G01.PL.Controllers
 
 			if (String.IsNullOrEmpty(searchInp))
 			{
-				employees = EmployeeRepository.GetAll();
+				employees = await EmployeeRepository.GetAllAsync();
 			}
 			else
 			{
@@ -67,13 +68,13 @@ namespace Route.C41.G01.PL.Controllers
 			return View(MappedEmployees);
 		}
 
-		public IActionResult Details(int? id, string ViewName = "Details")
+		public async Task<IActionResult> Details(int? id, string ViewName = "Details")
 		{
 			if (!id.HasValue)
 				return BadRequest();
 			else
 			{
-				var employee = _unitOfWork.Repository<Employee>().Get(id.Value);
+				var employee = await _unitOfWork.Repository<Employee>().GetAsync(id.Value);
 				if (employee is null)
 					return NotFound();
 
@@ -93,7 +94,7 @@ namespace Route.C41.G01.PL.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Create(EmployeeViewModel employeeVM)
+		public async Task<IActionResult> Create(EmployeeViewModel employeeVM)
 		{
 			if (ModelState.IsValid)
 			{
@@ -119,11 +120,11 @@ namespace Route.C41.G01.PL.Controllers
 				///var mappedEmployee = (Employee)employeeVM;
 
 
-				employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "images");
+				employeeVM.ImageName = await DocumentSettings.UploadFile(employeeVM.Image, "images");
 				var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
 				_unitOfWork.Repository<Employee>().Add(MappedEmp);
-				var count = _unitOfWork.Complete();
+				var count = await _unitOfWork.Complete();
 
 				if (count > 0)
 					TempData["Message"] = "Department Created Succeefuly";
@@ -136,15 +137,15 @@ namespace Route.C41.G01.PL.Controllers
 			return View(employeeVM);
 		}
 
-		public IActionResult Edit(int? id)
+		public async Task<IActionResult> Edit(int? id)
 		{
 			//ViewBag.Departments = _departmentRepository.GetAll();
-			return Details(id, "Edit");
+			return await Details(id, "Edit");
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Edit([FromRoute] int id, EmployeeViewModel employeeVm)
+		public async Task<IActionResult> Edit([FromRoute] int id, EmployeeViewModel employeeVm)
 		{
 			if (id != employeeVm.Id)
 				return BadRequest();
@@ -159,13 +160,13 @@ namespace Route.C41.G01.PL.Controllers
 					{
 						var oldImageName = TempData["ImageName"] as string;
 						DocumentSettings.DeleteFile(oldImageName, "images");
-						var imageName = DocumentSettings.UploadFile(employeeVm.Image, "images");
+						var imageName = await DocumentSettings.UploadFile(employeeVm.Image, "images");
 						employeeVm.ImageName = imageName;
 					}
 
 					var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVm);
 					_unitOfWork.Repository<Employee>().Update(MappedEmp);
-					_unitOfWork.Complete();
+					 await _unitOfWork.Complete();
 					return RedirectToAction("Index");
 				}
 				catch (Exception ex)
@@ -185,12 +186,12 @@ namespace Route.C41.G01.PL.Controllers
 		}
 
 
-		public IActionResult Delete(int? id)
+		public async Task<IActionResult> Delete(int? id)
 		{
-			return Details(id, "Delete");
+			return await Details(id, "Delete");
 		}
 		[HttpPost]
-		public IActionResult Delete(EmployeeViewModel employeeVm)
+		public async Task<IActionResult> Delete(EmployeeViewModel employeeVm)
 		{
 
 			try
@@ -198,7 +199,7 @@ namespace Route.C41.G01.PL.Controllers
 				employeeVm.ImageName = TempData["ImageName"] as String;
 				var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVm);
 				_unitOfWork.Repository<Employee>().Delete(MappedEmp);
-				var count = _unitOfWork.Complete();
+				var count = await _unitOfWork.Complete();
 				if (count > 0)
 				{
 					DocumentSettings.DeleteFile(employeeVm.ImageName, "images");
