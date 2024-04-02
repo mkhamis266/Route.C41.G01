@@ -12,7 +12,7 @@ using Route.C41.G01.DAL.Models;
 
 namespace Route.C41.G01.DAL.Data
 {
-    public class ApplicationDbContext : IdentityDbContext 
+    public class ApplicationDbContext : IdentityDbContext <ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
         {

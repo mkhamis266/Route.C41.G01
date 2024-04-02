@@ -1,0 +1,40 @@
+﻿@model SignUpViewModel
+@{
+    ViewData["Title"] = "SignUp";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form action="SignUp">
+			<h1>Create Account</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>or use your email for registration</span>
+			<input asp-for="FirstName" placeholder="Name" />
+			<input asp-for="LastName" placeholder="Name" />
+			<input asp-for="Username" placeholder="Name" />
+			<input asp-for="Email" placeholder="Email" />
+			<input asp-for="Password" placeholder="Password" />
+			<input asp-for="ConfirmPassword" placeholder="Confirm Password" />
+			<div style="display:flex; align-items:center">
+				<input asp-for="IsAgree" />
+				<label asp-for="IsAgree"></label>
+			</div>
+			<button class="button">Sign Up</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-right">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<a asp-action="signin" class="button ghost" id="signIn">Sign In</a>
+			</div>
+		</div>
+	</div>
+</div>
+
