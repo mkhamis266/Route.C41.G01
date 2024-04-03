@@ -6,7 +6,8 @@
 
 <div class="container" id="container">
 	<div class="form-container sign-in-container">
-		<form action="SignUp">
+		<div asp-validation-summary="ModelOnly"></div>
+		<form asp-action="SignUp">
 			<h1>Create Account</h1>
 			<div class="social-container">
 				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -14,9 +15,9 @@
 				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			</div>
 			<span>or use your email for registration</span>
-			<input asp-for="FirstName" placeholder="Name" />
-			<input asp-for="LastName" placeholder="Name" />
-			<input asp-for="Username" placeholder="Name" />
+			<input asp-for="FirstName" placeholder="First Name" />
+			<input asp-for="LastName" placeholder="Last Name" />
+			<input asp-for="Username" placeholder="User Name" />
 			<input asp-for="Email" placeholder="Email" />
 			<input asp-for="Password" placeholder="Password" />
 			<input asp-for="ConfirmPassword" placeholder="Confirm Password" />

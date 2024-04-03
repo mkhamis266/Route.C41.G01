@@ -47,9 +47,20 @@ namespace Route.C41.G01.PL
 
             services.AddAutoMapper(M => M.AddProfile( new MappingProfiles() ));
             services.AddIdentity<ApplicationUser, IdentityRole>(
-                options => { 
-                
-                });
+                options => {
+                    options.Password.RequiredLength = 5;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+
+                    options.Lockout.AllowedForNewUsers = true;
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(2);
+
+                    options.User.RequireUniqueEmail = true;
+                }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
