@@ -1,16 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
 namespace Route.C41.G01.PL.Helpers
 {
 	public static class DocumentSettings
 	{
-		public static string UploadFile(IFormFile file, string folderName)
+		public static async Task<string> UploadFile(IFormFile file, string folderName)
 		{
 			//1. Get Located Folder Path
 			//string FolderPath = $"{Directory.GetCurrentDirectory()}\\wwwroot\\files\\{folderName}"; 
-			string FolderPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroor\\files",folderName);
+			string FolderPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\files",folderName);
 
 			if (!Directory.Exists(FolderPath))
 				Directory.CreateDirectory(FolderPath);
@@ -25,7 +26,7 @@ namespace Route.C41.G01.PL.Helpers
 			//4. Save File as Streams [Data Per Time]
 			var FileStream = new FileStream(filePath,FileMode.Create);
 
-			file.CopyTo(FileStream);
+			await file.CopyToAsync(FileStream);
 
 			return fileName;
 		}

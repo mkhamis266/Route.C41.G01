@@ -21,24 +21,24 @@ namespace Route.C41.G01.BLL.Repositories
 
 
 		public void Add(T entity)
-			=> _dbContext.Set<T>().Add(entity);
+			=>  _dbContext.Set<T>().Add(entity);
 
 		public void Delete(T entity)
 			=> _dbContext.Set<T>().Remove(entity);
 
 
 
-		public T Get(int id)
+		public async Task<T> GetAsync(int id)
 		{
-			return _dbContext.Find<T>(id);
+			return await _dbContext.FindAsync<T>(id);
 		}
 
-		public IEnumerable<T> GetAll()
+		public virtual async Task<IEnumerable<T>> GetAllAsync()
 		{
 			if (typeof(T) == typeof(Employee))
-				return (IEnumerable<T>)_dbContext.Set<Employee>().Include(E => E.Department).AsNoTracking().ToList();
+				return  (IEnumerable<T>) await _dbContext.Set<Employee>().Include(E => E.Department).AsNoTracking().ToListAsync();
 			else
-				return _dbContext.Set<T>().AsNoTracking().ToList();
+				return await _dbContext.Set<T>().AsNoTracking().ToListAsync();
 		}
 
 

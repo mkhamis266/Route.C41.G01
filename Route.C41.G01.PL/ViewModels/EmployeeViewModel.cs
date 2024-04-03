@@ -1,6 +1,7 @@
 ﻿using Route.C41.G01.DAL.Models;
 using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Route.C41.G01.PL.ViewModels
 {
@@ -38,6 +39,9 @@ namespace Route.C41.G01.PL.ViewModels
 
         public EmpType EmployeeType { get; set; }
 
+        public IFormFile Image { get; set; }
+
+        public string ImageName { get; set; }
 
         //[ForeignKey("Department")]
         public int? DepartmentId { get; set; }  // Forign Key Column
