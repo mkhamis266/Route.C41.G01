@@ -1,4 +1,6 @@
-﻿@{
+﻿@model SignInViewModel
+
+@{
     ViewData["Title"] = "SignIn";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
@@ -6,7 +8,7 @@
 
 <div class="container" id="container">
 	<div class="form-container sign-in-container">
-		<form action="#">
+		<form asp-action="SignIn">
 			<h1>Sign in</h1>
 			<div class="social-container">
 				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -14,8 +16,11 @@
 				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			</div>
 			<span>or use your account</span>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
+			<input asp-for="Email" placeholder="Email" />
+			<input asp-for="Password" placeholder="Password" />
+			<input asp-for="RememberMe" type="checkbox" placeholder="Password" />
+			<span>Remember me</span>
+
 			<a href="#">Forgot your password?</a>
 			<button class="button">Sign In</button>
 		</form>

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Route.C41.G01.DAL.Models;
-using Route.C41.G01.PL.ViewModels.User;
+using Route.C41.G01.PL.ViewModels.Account;
 
 namespace Route.C41.G01.PL.Controllers
 {
@@ -62,6 +62,34 @@ namespace Route.C41.G01.PL.Controllers
 		public IActionResult SignIn()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> SignIn(SignInViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _UserManager.FindByEmailAsync(model.Email);
+				if(user is not null)
+				{
+					var flag = await _UserManager.CheckPasswordAsync(user, model.Password);
+					if (flag)
+					{
+						var ressult = await _signInManager.PasswordSignInAsync(user,model.Password, model.RememberMe,false);
+						if (ressult.Succeeded)
+							return RedirectToAction(nameof(HomeController.Index), "Home");
+
+						if (ressult.IsLockedOut)
+							ModelState.AddModelError(string.Empty, "Your account is locked!");
+						
+						if(ressult.IsNotAllowed)
+							ModelState.AddModelError(string.Empty, "Your email is not confirmed!");
+
+					}
+				}
+				ModelState.AddModelError(string.Empty, "Invalid Login");
+			}
+			return View(model);
 		}
 		#endregion
 
