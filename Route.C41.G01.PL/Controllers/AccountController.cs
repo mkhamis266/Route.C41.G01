@@ -97,7 +97,25 @@ namespace Route.C41.G01.PL.Controllers
 			await _signInManager.SignOutAsync();
 			return RedirectToAction(nameof(SignIn));
 		}
-		#endregion
+        #endregion
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
 
-	}
+		[HttpPost]
+		public async Task<IActionResult> SendResetPasswordEmail(ForgetPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _UserManager.FindByEmailAsync(model.Email);
+				if (user is not null)
+				{
+
+				}
+				ModelState.AddModelError(string.Empty, "There is no account with this email");
+			}
+			return View(model);
+		}
+    }
 }
