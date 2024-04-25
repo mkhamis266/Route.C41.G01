@@ -16,6 +16,7 @@ using Route.C41.G01.DAL.Data;
 using Route.C41.G01.DAL.Models;
 using Route.C41.G01.PL.Extensions;
 using Route.C41.G01.PL.Helpers;
+using Route.C41.G01.PL.Services.EmailSender;
 
 namespace Route.C41.G01.PL
 {
@@ -47,7 +48,8 @@ namespace Route.C41.G01.PL
 
             services.AddAutoMapper(M => M.AddProfile( new MappingProfiles() ));
             services.AddIdentity<ApplicationUser, IdentityRole>(
-                options => {
+                options =>
+                {
                     options.Password.RequiredLength = 5;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
@@ -58,14 +60,16 @@ namespace Route.C41.G01.PL
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(2);
 
                     options.User.RequireUniqueEmail = true;
-                }).AddEntityFrameworkStores<ApplicationDbContext>();
+                }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
             services.ConfigureApplicationCookie(options => 
             {
-                options.AccessDeniedPath = "/Home/Errpr";
-                options.LogoutPath = "/Account/SignIn";
+                options.AccessDeniedPath = "/Home/Error";
+                options.LoginPath = "/Account/SignIn";
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
             });
             services.AddAuthentication();
+            services.AddTransient<IEmailSender,EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
