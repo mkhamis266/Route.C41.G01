@@ -61,7 +61,7 @@ namespace Route.C41.G01.PL
                 }).AddEntityFrameworkStores<ApplicationDbContext>();
             services.ConfigureApplicationCookie(options => 
             {
-                options.AccessDeniedPath = "Home/Errpr";
+                options.AccessDeniedPath = "/Home/Errpr";
                 options.LogoutPath = "/Account/SignIn";
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
             });

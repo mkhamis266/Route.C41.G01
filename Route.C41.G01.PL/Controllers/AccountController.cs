@@ -91,6 +91,12 @@ namespace Route.C41.G01.PL.Controllers
 			}
 			return View(model);
 		}
+
+		public async new Task<IActionResult> SignOut()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction(nameof(SignIn));
+		}
 		#endregion
 
 	}
