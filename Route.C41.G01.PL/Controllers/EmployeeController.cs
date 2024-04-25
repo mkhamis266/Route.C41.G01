@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
@@ -14,6 +15,7 @@ using Route.C41.G01.PL.ViewModels;
 
 namespace Route.C41.G01.PL.Controllers
 {
+	[Authorize]
 	public class EmployeeController : Controller
 	{
 		private readonly IMapper _mapper;

@@ -59,7 +59,12 @@ namespace Route.C41.G01.PL
 
                     options.User.RequireUniqueEmail = true;
                 }).AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.ConfigureApplicationCookie(options => 
+            {
+                options.AccessDeniedPath = "Home/Errpr";
+                options.LogoutPath = "/Account/SignIn";
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+            });
             services.AddAuthentication();
         }
 
@@ -81,6 +86,7 @@ namespace Route.C41.G01.PL
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
